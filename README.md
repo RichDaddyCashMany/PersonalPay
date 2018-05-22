@@ -1,2 +1,2 @@
-# PersonalPay
-个人支付宝微信收款解决方案
+官网：[www.51shuaba.xyz](http://www.51shuaba.xyz)
+
