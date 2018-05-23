@@ -1,0 +1,28 @@
+.el-breadcrumb {
+  margin-bottom: 40px;
+  margin-top: 10px;
+}
+
+.el-message-box {
+  width: auto;
+  min-width: 420px;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pagination p.count {
+  font-size: 14px;
+  margin-right: 10px;
+  color: #666;
+}
+
+.el-select .el-input {
+    width: 130px;
+  }
+  .input-with-select .el-input-group__prepend {
+    background-color: #fff;
+  }
