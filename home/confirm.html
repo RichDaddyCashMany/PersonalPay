@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>51刷吧 - 免费个人收款</title>
+  <meta name="keywords" content="个人收款,个人支付宝,个人支付接口,个人微信,支付接口,免费个人收款,51shuaba,免费代理发卡,免费自动发卡,辅助代理发卡">
+  <meta name="description" content="免费个人收款">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+  <style type="text/css">
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  #app {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    background-color: rgb(248, 248, 248);
+  }
+  .head {
+    z-index: 999;
+    font-size: 16px;
+    color: #333;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    line-height: 44px;
+    display: flex;
+    justify-content: center;
+    border: 1px solid transparent;
+    background-color: white;
+    border-width: 0px 0 1px;
+    border-color: #f0f0f0;
+  }
+
+  .container {
+    max-width: 600px;
+    margin-top: 60px;
+    width: 100%;
+  }
+
+  .cell {
+    height: 44px;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .cell .cell-title {
+    color: #333;
+    font-size: 14px;
+    line-height: 44px;
+  }
+  .cell-content {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  img.arrow {
+    margin-left: 8px;
+    width: 8px;
+  }
+  .separator {
+    height: 1px;
+    background-color: rgb(248, 248, 248);
+  }
+  .section {
+    padding: 8px 8px 8px 8px;
+  }
+  .section p {
+    color: #999;
+    font-size: 12px;
+  }
+  input {
+    -webkit-appearance: none;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid white;
+    box-sizing: border-box;
+    display: inline-block;
+    width: 240px;
+    height: 30px;
+    line-height: 30px;
+    outline: 0;
+    text-align: right;
+    cursor: text;
+    font-size: 12px;
+    color: #666;
+  }
+  input::-webkit-input-placeholder { /* WebKit browsers*/ 
+　　color: red;
+　}
+  input:-moz-placeholder {  /* Mozilla Firefox 4 to 18*/ 
+　　color: red;
+　　}
+  input::-moz-placeholder {  /* Mozilla Firefox 19+*/ 
+　　color: red;
+　}
+  input:-ms-input-placeholder { /* Internet Explorer 10+*/ 
+  　color: red;
+  }
+  .bottom-bar {
+    z-index: 999;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+  }
+  .bottom-bar-wrap {
+    border: 1px solid transparent;
+    background-color: white;
+    border-width: 0 0 -1px;
+    border-color: rgb(246, 246, 246);
+    height: 100%;
+    max-width: 600px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .bottom-bar-wrap p {
+    color: #409EFF;
+    font-size: 14px;
+  }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="head">
+      <span>确认收款</span>
+    </div>
+
+    <div class="container">
+
+      <div class="cell">
+        <span class="cell-title">订单号</span>
+        <div class="cell-content">
+          <input class="input" type="text" v-model="form.order_no" disabled="true">
+        </div>
+      </div>
+
+      <div class="separator"></div>
+
+      <div class="cell">
+        <span class="cell-title">密 码</span>
+        <div class="cell-content">
+          <input class="input" placeholder="请输入登录密码" type="password" v-model="form.password">
+        </div>
+      </div>
+
+      <div class="section">
+        <p>确认收款后，买家将会收到收货邮件</p>
+      </div>
+
+      <div class="bottom-bar">
+        <div class="bottom-bar-wrap" @click="submitForm">
+          <p>提交</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: function() {
+        return {
+          sendOrder: false,
+          products: [],
+          form: {
+            password: '',
+            secret_key: '',
+            order_no: ''
+          },
+          rules: {
+            password: [
+              {
+                validator: (rule, value, callback) => {
+                  if (value === '') {
+                    callback(new Error('请输入二级密码'))
+                  }
+                  callback()
+                },
+                trigger: 'blur',
+                required: true
+              }
+            ]
+          }
+        }
+      },
+      methods: {
+        toast (msg){
+          const duration=1000
+          var m = document.createElement('div')
+          m.innerHTML = '<span style="background-color:black;opacity:0.7;color:white;padding:5px 14px;">' + msg + '</span>'
+          m.style.cssText="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;justify-content:center;align-items:center;"
+          document.body.appendChild(m)
+          setTimeout(function() {  
+              var d = 0.5;  
+              m.style.webkitTransition = '-webkit-transform ' + d + 's ease-in, opacity ' + d + 's ease-in'
+              m.style.opacity = '0'
+              setTimeout(function() { document.body.removeChild(m) }, d * 1000)
+          }, duration)
+        },
+        submitForm () {
+          if (this.form.password === '') {
+            this.toast('请输入登录密码')
+            return
+          }
+          this.requestOrderCreate()
+        },
+        requestOrderCreate () {
+          const URL = 'http://www.51shuaba.xyz:82'
+          // const URL = 'http://localhost:5000/'
+          axios.post(URL + '/confirm/send', this.form)
+          .then((response) => {
+            console.log(response)
+            if (response && response.status === 200) {
+              if (response.data.code === 0) {
+                this.form.password = ''
+                this.toast('确认成功')
+              } else {
+                this.toast(response.data.message)
+              }
+            } else {
+              this.toast('网络异常')
+            }
+          })
+        },
+        getQueryString(name) {  
+          var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i")
+          var r = window.location.search.substr(1).match(reg)
+          if (r != null) return unescape(r[2])
+          return null
+        }
+      },
+      created: function () {
+        this.form.secret_key = this.getQueryString('secretkey')
+        this.form.order_no = this.getQueryString('orderno')
+      }
+    })
+  </script>
+</html>

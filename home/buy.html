@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>51刷吧 - 免费个人收款</title>
+  <meta name="keywords" content="个人收款,个人支付宝,个人支付接口,个人微信,支付接口,免费个人收款,51shuaba,免费代理发卡,免费自动发卡,辅助代理发卡">
+  <meta name="description" content="免费个人收款">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+  <style type="text/css">
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  #app {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    background-color: rgb(248, 248, 248);
+  }
+  .head {
+    z-index: 999;
+    font-size: 16px;
+    color: #333;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    line-height: 44px;
+    display: flex;
+    justify-content: center;
+    border: 1px solid transparent;
+    background-color: white;
+    border-width: 0px 0 1px;
+    border-color: #f0f0f0;
+  }
+  .container {
+    max-width: 600px;
+    margin-top: 60px;
+    width: 100%;
+  }
+  .desc {
+    color: #666666;
+    font-size: 15px;
+    word-wrap: break-word;
+  }
+  .price {
+    font-size: 24px;
+    color: #d44d44;
+  }
+  .onlinetime {
+    font-size: 12px;
+    color: #999999;
+  }
+  .submit {
+    display: flex;
+  }
+  .overlay {
+    z-index: 999;
+    position: absolute;
+    opacity: 1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+  }
+  .overlay-wrap {
+    max-width: 600px;
+    width: 100%;
+    background-color: #333;
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .qrcode {
+    width: 200px;
+  }
+  .showkuan-wrap {
+    margin-bottom: 18px;
+  }
+  .showkuan {
+    font-size: 12px;
+    color: white;
+  }
+  .tip {
+    font-size: 12px;
+    color: white;
+    text-align: center;
+    margin-top: 20px;
+  }
+  .close-wrap {
+    background-color: red;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: flex-end;
+    cursor: pointer;
+  }
+  .close-btn {
+    padding: 5px;
+    cursor: pointer;
+  }
+  .close {
+    color: #333;
+    font-size: 30px;
+    transform: rotate(45deg);
+    position: relative;
+    right: 0;
+    top: -13px;
+  }
+  .top {
+    color: white;
+    position: absolute;
+    left: 0;
+    top: 24px;
+    right: 0;
+    height: 20px;
+    text-align: center;
+    opacity: 0.5;
+    font-size: 18px;
+  }
+
+  .cell {
+    height: 44px;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .cell .cell-title {
+    color: #333;
+    font-size: 14px;
+    line-height: 44px;
+  }
+  .cell-content {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  img.arrow {
+    margin-left: 8px;
+    width: 8px;
+  }
+  .separator {
+    height: 1px;
+    background-color: rgb(248, 248, 248);
+  }
+  .section {
+    padding: 8px 8px 8px 8px;
+  }
+  .section p {
+    color: #999;
+    font-size: 12px;
+  }
+  input {
+    -webkit-appearance: none;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid white;
+    box-sizing: border-box;
+    display: inline-block;
+    width: 200px;
+    height: 30px;
+    line-height: 30px;
+    outline: 0;
+    text-align: right;
+    cursor: text;
+    font-size: 13px;
+    color: #666;
+  }
+  input::-webkit-input-placeholder { /* WebKit browsers*/ 
+　　color: red;
+　}
+  input:-moz-placeholder {  /* Mozilla Firefox 4 to 18*/ 
+　　color: red;
+　　}
+  input::-moz-placeholder {  /* Mozilla Firefox 19+*/ 
+　　color: red;
+　}
+  input:-ms-input-placeholder { /* Internet Explorer 10+*/ 
+  　color: red;
+  }
+  .margin {
+    height: 8px;
+  }
+  .left-img {
+    height: 22px;
+    margin-right: 8px;
+  }
+  .checkbox-img {
+    width: 20px;
+  }
+  div.checkbox {
+    width: 100px;
+    display: flex;
+    justify-content: flex-end;
+    cursor: pointer;
+  }
+  .bottom-bar {
+    z-index: 999;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+  }
+  .bottom-bar-wrap {
+    border: 1px solid transparent;
+    background-color: #fff;
+    border-width: 0 0 -1px;
+    border-color: rgb(246, 246, 246);
+    background-color: white;
+    height: 100%;
+    max-width: 600px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  .buy-btn {
+    color: white;
+    width: 100px;
+    text-align: center;
+    line-height: 50px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .price {
+    color: rgb(235, 0, 10);
+    line-height: 50px;
+    font-size: 26px;
+    padding-left: 10px;
+    font-weight: 700;
+  }
+  .alert-menu {
+    background-color: white;
+    width: 100%;
+  }
+  .alert-menu-head {
+    position: relative;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 44px;
+    border-bottom: 1px solid rgb(248,248,248);
+    display: flex;
+    justify-content: space-between;
+  }
+  .alert-menu-head p {
+    color: #333;
+    height: 44px;
+    line-height: 44px;
+    padding-left: 16px;
+  }
+  .alert-menu-cell {
+    color: #666;
+    padding-left: 16px;
+    line-height: 44px;
+    border-bottom: 1px solid rgb(248, 248, 248);
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+  .product-choose-name {
+    color: #333;
+    font-size: 14px;
+  }
+  .product-choose-price {
+    padding-right: 16px;
+    color: rgb(235, 0, 10);
+    font-size: 14px;
+  }
+  .card-wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .card {
+    background-color: white;
+    width: 300px;
+    height: 420px;
+    border-radius: 3px;
+    box-shadow: 1px 1px 10px rgb(240,240,240);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .qrcode-img {
+    width: 160px;
+    height: 160px;
+  }
+  .card-top-text {
+    padding-top: 60px;
+    color: #666;
+    font-size: 14px;
+  }
+  .card-bottom-text {
+    font-size: 12px;
+    color: #999;
+    padding-bottom: 60px;
+  }
+  .margin-bottom {
+    height: 50px;
+  }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="head">
+      <span>购买</span>
+    </div>
+    
+    <div class="container">
+
+      <div class="card-wrap" v-if="sendOrder">
+        <div class="card">
+          <p class="card-top-text" v-if="form.platform == 0">支付宝扫一扫，向{{mch.alipay_name}}付款</p>
+          <p class="card-top-text" v-if="form.platform == 1">微信扫一扫，向{{mch.wechat_name}}付款</p>
+          <img class="qrcode-img" :src="selectedProduct ? selectedProduct.alipay_qrcode : ''" v-if="form.platform == 0">
+          <img class="qrcode-img" :src="selectedProduct ? selectedProduct.wechat_qrcode : ''" v-if="form.platform == 1">
+          <p class="card-bottom-text">商户确认收款后您会收到收货邮件，请耐心等待</p>
+        </div>
+      </div>
+
+      <form v-if="!sendOrder">
+        <div class="cell">
+          <span class="cell-title">商品选择</span>
+          <div class="cell-content">
+            <span class="cell-title" @click="onChooseProduct">{{selectedProduct ? selectedProduct.name : '请选择'}}</span>
+            <img class="arrow" src="http://save-1252137158.file.myqcloud.com/arrow.png">
+          </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="cell">
+          <span class="cell-title">商户在线时间</span>
+          <div class="cell-content" v-if="mch">
+            <span class="cell-title">{{mch.online_from + ' ~ ' + mch.online_to}}</span>
+            <img class="arrow" src="">
+          </div>
+        </div>
+
+        <div class="section" v-if="selectedProduct && selectedProduct.desc">
+          <p>{{selectedProduct.desc}}</p>
+        </div>
+
+        <div class="margin"></div>
+
+        <div class="section">
+          <p>必填信息</p>
+        </div>
+
+        <div class="cell">
+          <span class="cell-title">支付账号</span>
+          <div class="cell-content">
+            <input class="input" type="text" placeholder="请填写" v-model="form.from_account">
+          </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="cell">
+          <span class="cell-title">收货邮箱</span>
+          <div class="cell-content">
+            <input class="input" type="text" placeholder="请填写" v-model="form.from_email">
+          </div>
+        </div>
+
+        <div class="margin"></div>
+
+        <div class="section">
+          <p>选填信息</p>
+        </div>
+
+        <div class="cell">
+          <span class="cell-title">支付昵称</span>
+          <div class="cell-content">
+            <input class="input" type="text" placeholder="" v-model="form.from_nickname">
+          </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="cell">
+          <span class="cell-title">留言</span>
+          <div class="cell-content">
+            <input class="input" type="text" placeholder="" v-model="form.message">
+          </div>
+        </div>
+
+        <div class="margin"></div>
+
+        <div class="section">
+          <p>支付方式</p>
+        </div>
+
+        <div class="cell">
+          <div class="cell-content">
+            <img class="left-img" src="http://save-1252137158.file.myqcloud.com/alipay%402x.png">
+            <span class="cell-title">支付宝</span>
+          </div>
+          <div class="cell-content checkbox" @click="onTogglePlatform('0')">
+            <img class="checkbox-img" src="http://save-1252137158.file.myqcloud.com/select_yes.png" v-if="form.platform == '0'">
+            <img class="checkbox-img" src="http://save-1252137158.file.myqcloud.com/select_no.png" v-if="form.platform == '1'">
+          </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="cell">
+          <div class="cell-content">
+            <img class="left-img" src="http://save-1252137158.file.myqcloud.com/wechat_pay%402x.png">
+            <span class="cell-title">微信支付</span>
+          </div>
+          <div class="cell-content checkbox" @click="onTogglePlatform('1')">
+            <img class="checkbox-img" src="http://save-1252137158.file.myqcloud.com/select_yes.png" v-if="form.platform == '1'">
+            <img class="checkbox-img" src="http://save-1252137158.file.myqcloud.com/select_no.png" v-if="form.platform == '0'">
+          </div>
+        </div>
+
+        <div class="margin-bottom"></div>
+
+        <div class="bottom-bar">
+          <div class="bottom-bar-wrap">
+            <p class="price">￥{{selectedProduct ? (selectedProduct.price / 100).toFixed(2) : ''}}</p>
+            <p class="buy-btn" :style="{'background-color': buttonDisable ? '#d3d3d3' : '#409EFF'}" @click="submitForm">{{buttonDisable ? '请稍等' : '扫码付款'}}</p>
+          </div>
+        </div>
+
+        <div class="overlay" v-if="productAlertShow">
+          <div class="overlay-wrap">
+            <div class="alert-menu">
+              <div class="alert-menu-head">
+                <p>商品选择</p>
+                <div class="close-btn">
+                  <p class="close" @click="onCloseAlert">+</p>
+                </div>
+              </div>
+              <div class="alert-menu-cell" v-for="product in products" @click="onSelectProduct(product)">
+                <p class="product-choose-name">{{product.name}}</p>
+                <p class="product-choose-price">￥{{(product.price / 100).toFixed(2)}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</body>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: function() {
+        return {
+          selectedProduct: null,
+          productAlertShow: false,
+          buttonDisable: false,
+          sendOrder: false,
+          products: [],
+          mch: {},
+          form: {
+            productId: '',
+            from_account: '',
+            from_email: '',
+            from_nickname: '',
+            message: '',
+            platform: '0'
+          }
+        }
+      },
+      computed: {
+      },
+      methods: {
+        toast (msg){
+          const duration=1000
+          var m = document.createElement('div')
+          m.innerHTML = '<span style="background-color:black;opacity:0.7;color:white;padding:5px 14px;">' + msg + '</span>'
+          m.style.cssText="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;justify-content:center;align-items:center;"
+          document.body.appendChild(m)
+          setTimeout(function() {  
+              var d = 0.5;  
+              m.style.webkitTransition = '-webkit-transform ' + d + 's ease-in, opacity ' + d + 's ease-in'
+              m.style.opacity = '0'
+              setTimeout(function() { document.body.removeChild(m) }, d * 1000)
+          }, duration)
+        },
+        onTogglePlatform (value) {
+          this.form.platform = value
+        },
+        onSelectProduct (product) {
+          this.selectedProduct = product
+          this.form.productId = product.productId
+          this.onCloseAlert()
+        },
+        onCloseAlert () {
+          this.productAlertShow = false
+        },
+        onChooseProduct () {
+          this.productAlertShow = true
+        },
+        onClose () {
+          this.sendOrder = false
+        },
+        submitForm () {
+          if (!this.form.productId || this.form.productId.length == 0) {
+            this.toast('请选择商品')
+          } else if (!this.form.productId || this.form.from_account.length == 0) {
+            this.toast('请输入支付账号')
+          } else if (!this.form.productId || this.form.from_email.length == 0) {
+            this.toast('请输入收货邮箱')
+          } else {
+            this.requestOrderCreate()
+          }
+        },
+        requestOrderCreate () {
+          localStorage.setItem('_51shuaba_pay_account', this.form.from_account)
+          localStorage.setItem('_51shuaba_pay_email', this.form.from_email)
+          this.buttonDisable = true
+          const URL = 'http://www.51shuaba.xyz:82'
+          // const URL = 'http://localhost:5000'
+          axios.post(URL + '/client/order/create', this.form)
+          .then((response) => {
+            this.buttonDisable = false
+            console.log(response)
+            if (response && response.status === 200) {
+              if (response.data.code === 0) {
+                this.sendOrder = true
+              } else {
+                this.toast(response.data.message)
+              }
+            } else {
+              this.toast('网络异常')
+            }
+          })
+        },
+        getQueryString(name) {  
+          var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i")
+          var r = window.location.search.substr(1).match(reg)
+          if (r != null) return unescape(r[2])
+          return null
+        }
+      },
+      created: function () {
+        if (localStorage._51shuaba_pay_account) {
+          this.form.from_account = localStorage._51shuaba_pay_account
+        }
+        if (localStorage._51shuaba_pay_email) {
+          this.form.from_email = localStorage._51shuaba_pay_email
+        }
+        const URL = 'http://www.51shuaba.xyz:82'
+        // const URL = 'http://localhost:5000'
+        axios.post(URL + '/client/product/list', {
+          mch: this.getQueryString('mch')
+        })
+        .then((response) => {
+          if (response && response.status === 200) {
+            this.products = response.data.data.list
+            this.mch = response.data.data.mch
+            if (response.data.code === 0) {
+              if (this.products.length > 0) {
+                this.form.productId = this.products[0].productId
+                this.selectedProduct = this.products[0]
+              }
+            } else {
+              this.toast(response.data.message)
+            }
+          } else {
+            this.toast('网络异常')
+          }
+        })
+      }
+    })
+  </script>
+</html>
