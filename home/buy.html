@@ -534,7 +534,7 @@
           localStorage.setItem('_51shuaba_pay_account', this.form.from_account)
           localStorage.setItem('_51shuaba_pay_email', this.form.from_email)
           this.buttonDisable = true
-          const URL = 'http://www.51shuaba.xyz:82'
+          const URL = 'http://123.206.186.27:82'
           // const URL = 'http://localhost:5000'
           axios.post(URL + '/client/order/create', this.form)
           .then((response) => {
@@ -565,7 +565,7 @@
         if (localStorage._51shuaba_pay_email) {
           this.form.from_email = localStorage._51shuaba_pay_email
         }
-        const URL = 'http://www.51shuaba.xyz:82'
+        const URL = 'http://123.206.186.27:82'
         // const URL = 'http://localhost:5000'
         axios.post(URL + '/client/product/list', {
           mch: this.getQueryString('mch')
